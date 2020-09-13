@@ -1,0 +1,46 @@
+{
+  "name": "protov",
+  "version": "0.0.1",
+  "description": "JavaScript MTProto implementation.",
+  "main": "index.js",
+  "scripts": {
+    "build": "rm -rf lib && tsc",
+    "start": "rm -rf lib && tsc && node ./lib/index.js",
+    "dev": "ts-node-dev --respawn ./src/index.ts",
+    "test": "jest --config jestconfig.json",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TelegramV/ProtoV.git"
+  },
+  "keywords": [
+    "telegram",
+    "mtproto"
+  ],
+  "author": "kohutd",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TelegramV/ProtoV/issues"
+  },
+  "homepage": "https://github.com/TelegramV/ProtoV#readme",
+  "devDependencies": {
+    "@types/node": "^14.6.4",
+    "ts-node-dev": "^1.0.0-pre.56",
+    "typescript": "^3.7.5"
+  },
+  "dependencies": {
+    "@cryptography/aes": "^0.1.1",
+    "@types/pako": "^1.0.1",
+    "@types/ws": "^7.2.6",
+    "big-integer": "^1.6.48",
+    "buffer": "^5.6.0",
+    "js-sha256": "^0.9.0",
+    "pako": "^1.0.11",
+    "protov-tl": "^0.5.2",
+    "rusha": "^0.8.13",
+    "websocket": "^1.0.32",
+    "ws": "^7.3.1"
+  }
+}
