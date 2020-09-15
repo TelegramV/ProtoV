@@ -1,13 +1,12 @@
 {
   "name": "protov",
-  "version": "0.0.1",
+  "version": "0.0.1-alpha-4",
   "description": "JavaScript MTProto implementation.",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "build": "rm -rf lib && tsc",
-    "start": "rm -rf lib && tsc && node ./lib/index.js",
     "dev": "ts-node-dev --respawn ./src/index.ts",
-    "test": "jest --config jestconfig.json",
     "prepare": "npm run build",
     "prepublishOnly": "npm test"
   },
@@ -28,7 +27,8 @@
   "devDependencies": {
     "@types/node": "^14.6.4",
     "ts-node-dev": "^1.0.0-pre.56",
-    "typescript": "^3.7.5"
+    "typescript": "^3.7.5",
+    "protov-tl-schema": "^2.113.1"
   },
   "dependencies": {
     "@cryptography/aes": "^0.1.1",
@@ -38,7 +38,7 @@
     "buffer": "^5.6.0",
     "js-sha256": "^0.9.0",
     "pako": "^1.0.11",
-    "protov-tl": "^0.5.2",
+    "protov-tl": "^0.5.3",
     "rusha": "^0.8.13",
     "websocket": "^1.0.32",
     "ws": "^7.3.1"

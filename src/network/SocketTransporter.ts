@@ -1,5 +1,4 @@
 import Connection from "./Connection";
-import WebSocket from "ws";
 import {CTR} from "@cryptography/aes";
 import {Buffer} from "buffer/";
 import {randomInteger} from "../utils/random";
@@ -8,6 +7,10 @@ import logger from "../utils/log";
 import {Transporter} from "../types";
 
 const LOG = logger("[SocketTransporter]");
+
+if (!global.WebSocket) {
+    global.WebSocket = require("ws");
+}
 
 function getDcUrl(dcId: number): string {
     const subdomain = ["pluto", "venus", "aurora", "vesta", "flora"][dcId - 1];
@@ -82,7 +85,7 @@ class SocketTransporter implements Transporter {
             this.onConnect();
         };
 
-        this.webSocket.onmessage = (event: WebSocket.MessageEvent) => {
+        this.webSocket.onmessage = (event: any) => {
             const message = this.receive(event);
 
             if (message.byteLength <= 4) {
@@ -92,11 +95,11 @@ class SocketTransporter implements Transporter {
             this.connection.receiveMessage(message);
         };
 
-        this.webSocket.onerror = (event: WebSocket.ErrorEvent) => {
+        this.webSocket.onerror = (event: any) => {
             console.error("SOCK_ERROR", event.error);
         };
 
-        this.webSocket.onclose = (event: WebSocket.CloseEvent) => {
+        this.webSocket.onclose = (event: any) => {
             this.isConnected = false;
 
             this.onDisconnect();
@@ -163,7 +166,7 @@ class SocketTransporter implements Transporter {
         this.webSocket.send(outBuffer.buffer);
     }
 
-    protected send(buffer: ArrayBuffer, cb?: (err?: Error) => void) {
+    protected send(buffer: ArrayBuffer) {
         if (!this.webSocket) {
             throw new Error("webSocket is not initialized");
         }
@@ -176,15 +179,15 @@ class SocketTransporter implements Transporter {
         outBuffer.writeUInt32LE(buffer.byteLength, 0);
         outBuffer.set(Buffer.from(buffer), 4);
 
-        this.webSocket.send(reverseEndian(uInt8(this.aesEncryptor.encrypt(outBuffer).buffer)), cb);
+        this.webSocket.send(reverseEndian(uInt8(this.aesEncryptor.encrypt(outBuffer).buffer)));
     }
 
-    protected receive(ev: WebSocket.MessageEvent): Uint8Array {
+    protected receive(event: any): Uint8Array {
         if (!this.aesDecryptor) {
             throw new Error("aesDecryptor is not initialized");
         }
 
-        return reverseEndian(uInt8(this.aesDecryptor.decrypt(uInt8(ev.data as ArrayBuffer)).buffer)).slice(4);
+        return reverseEndian(uInt8(this.aesDecryptor.decrypt(uInt8(event.data as ArrayBuffer)).buffer)).slice(4);
     }
 
     protected onConnect() {

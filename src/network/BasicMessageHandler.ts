@@ -28,7 +28,7 @@ class BasicMessageHandler implements MessagesHandler {
             return Promise.reject("no rpc request found");
         }
 
-        if (rpc_result.result._ === "rpc_error") {
+        if (rpc_result.result._ === "mtproto/rpc_error") {
             const error = {
                 request: {
                     name: request.name,
@@ -129,25 +129,25 @@ class BasicMessageHandler implements MessagesHandler {
         }
 
         switch (message._) {
-            case "rpc_result":
+            case "mtproto/rpc_result":
                 return this.handleRPCResult(message_id, message);
-            case "msg_container":
+            case "mtproto/msg_container":
                 return this.handleMsgContainer(message_id, message);
-            case "message":
+            case "mtproto/message":
                 return this.handleMessage(message_id, message);
-            case "pong":
+            case "mtproto/pong":
                 return Promise.resolve();
-            case "msgs_ack":
+            case "mtproto/msgs_ack":
                 return this.handleMsgsAck(message_id, message);
-            case "bad_server_salt":
+            case "mtproto/bad_server_salt":
                 return this.handleBadServerSalt(message_id, message);
-            case "new_session_created":
+            case "mtproto/new_session_created":
                 return this.handleNewSessionCreated(message_id, message);
-            case "msg_new_detailed_info":
+            case "mtproto/msg_new_detailed_info":
                 return this.handleMsgNewDetailedInfo(message_id, message);
-            case "msg_detailed_info":
+            case "mtproto/msg_detailed_info":
                 return this.handleMsgDetailedInfo(message_id, message);
-            case "bad_msg_notification":
+            case "mtproto/bad_msg_notification":
                 return this.handleBadMsgNotification(message_id, message);
             case "messageEmpty":
                 return Promise.resolve("messageEmpty");

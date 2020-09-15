@@ -1,9 +1,10 @@
 import MemoryStorage from "./MemoryStorage";
 import Connection from "../network/Connection";
-import {randomBuffer} from "../utils/random";
 import logger from "../utils/log";
 import {Storage} from "../types";
 import {Constructor, Schema} from "protov-tl/lib/types";
+import JsonSchema from "protov-tl/lib/JsonSchema";
+import schema_mtproto_v2 from "./schema_mtproto_v2.json";
 
 interface Config {
     api_id: number;
@@ -11,8 +12,7 @@ interface Config {
     app_version: string;
     main_dc_id?: number;
     layer: number;
-    schema: Schema;
-    session_id?: Uint8Array;
+    schema: Object | any;
     storage?: Storage;
 }
 
@@ -20,22 +20,25 @@ const LOG = logger("[Telegram]");
 
 class TelegramApplication {
     config: Config & { session_id: Uint8Array; };
-    storage: Storage;
+    storage: Storage | "memory" | "file";
     user: any;
     connections: Map<number, Connection>;
     _isReady: boolean;
+
+    schema: Schema;
 
     constructor(config: Config) {
         // @ts-ignore
         this.config = config;
 
-        if (!this.config.session_id) {
-            this.config.session_id = randomBuffer(8);
-        }
-
         if (!this.config.main_dc_id) {
             this.config.main_dc_id = 2;
         }
+
+        schema_mtproto_v2.constructors.push(...config.schema.constructors);
+        schema_mtproto_v2.methods.push(...config.schema.methods);
+
+        this.schema = new JsonSchema(schema_mtproto_v2);
 
         if (this.config.storage) {
             this.storage = this.config.storage;
@@ -136,7 +139,6 @@ class TelegramApplication {
     }
 
     getConnection(dcId: number): Connection {
-        console.info("getConnection", dcId);
         let connection = this.connections.get(dcId);
 
         if (!connection) {

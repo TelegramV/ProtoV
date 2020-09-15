@@ -64,7 +64,7 @@ class Authorization {
             this.isAuthorized = false;
             this.isAuthorizing = true;
 
-            const ResPQ = await this.connection.invokeUnencryptedMethod("req_pq", {
+            const ResPQ = await this.connection.invokeUnencryptedMethod("mtproto/req_pq", {
                 nonce,
             });
 
@@ -82,8 +82,8 @@ class Authorization {
 
             const new_nonce = randomBuffer(32);
 
-            const data = TL.pack(this.connection.application.config.schema, {
-                _: "p_q_inner_data",
+            const data = TL.pack(this.connection.application.schema, {
+                _: "mtproto/p_q_inner_data",
                 pq: ResPQ.pq,
                 p: P_Q.p,
                 q: P_Q.q,
@@ -100,7 +100,7 @@ class Authorization {
 
             const encrypted_data = rsa_encrypt(data_with_hash, pk);
 
-            const ServerDHParams = await this.connection.invokeUnencryptedMethod("req_DH_params", {
+            const ServerDHParams = await this.connection.invokeUnencryptedMethod("mtproto/req_DH_params", {
                 nonce: nonce,
                 server_nonce: ResPQ.server_nonce,
                 p: P_Q.p,
@@ -109,7 +109,7 @@ class Authorization {
                 encrypted_data: encrypted_data
             });
 
-            if (ServerDHParams._ !== "server_DH_params_ok") {
+            if (ServerDHParams._ !== "mtproto/server_DH_params_ok") {
                 throw new Error(ServerDHParams._);
             }
 
@@ -137,12 +137,12 @@ class Authorization {
             const hash = answer_with_hash.slice(0, 20);
             const answer_with_padding = answer_with_hash.slice(20);
 
-            const Server_DH_inner_data_Unpacker = TL.unpacker(this.connection.application.config.schema, answer_with_padding.buffer);
+            const Server_DH_inner_data_Unpacker = TL.unpacker(this.connection.application.schema, answer_with_padding.buffer);
             const Server_DH_inner_data = Server_DH_inner_data_Unpacker.unpack();
 
             const answer = answer_with_padding.slice(0, Server_DH_inner_data_Unpacker.offset);
 
-            if (Server_DH_inner_data._ !== "server_DH_inner_data") {
+            if (Server_DH_inner_data._ !== "mtproto/server_DH_inner_data") {
                 throw new Error("invalid server_DH_inner_data" + Server_DH_inner_data._);
             }
 
@@ -201,8 +201,8 @@ class Authorization {
                 const b = randomBuffer(256);
                 const g_b = modPow(g_bytes, b, Server_DH_inner_data.dh_prime);
 
-                const Client_DH_Inner_Data = TL.pack(this.connection.application.config.schema, {
-                    _: "client_DH_inner_data",
+                const Client_DH_Inner_Data = TL.pack(this.connection.application.schema, {
+                    _: "mtproto/client_DH_inner_data",
                     nonce: nonce,
                     server_nonce: ResPQ.server_nonce,
                     retry_id: String(retry++),
@@ -217,16 +217,16 @@ class Authorization {
 
                 const encrypted_data = aes_ige_encrypt(data_with_hash, tmp_aes_key, tmp_aes_iv);
 
-                let Set_client_DH_params_answer = await this.connection.invokeUnencryptedMethod("set_client_DH_params", {
+                let Set_client_DH_params_answer = await this.connection.invokeUnencryptedMethod("mtproto/set_client_DH_params", {
                     nonce: nonce,
                     server_nonce: ResPQ.server_nonce,
                     encrypted_data: encrypted_data,
                 });
 
                 if (
-                    Set_client_DH_params_answer._ !== "dh_gen_ok" &&
-                    Set_client_DH_params_answer._ !== "dh_gen_retry" &&
-                    Set_client_DH_params_answer._ !== "dh_gen_fail"
+                    Set_client_DH_params_answer._ !== "mtproto/dh_gen_ok" &&
+                    Set_client_DH_params_answer._ !== "mtproto/dh_gen_retry" &&
+                    Set_client_DH_params_answer._ !== "mtproto/dh_gen_fail"
                 ) {
                     throw new Error(Set_client_DH_params_answer._);
                 }
@@ -242,7 +242,7 @@ class Authorization {
                 this.setAuthKey(modPow(Server_DH_inner_data.g_a, b, Server_DH_inner_data.dh_prime));
 
                 switch (Set_client_DH_params_answer._) {
-                    case "dh_gen_ok":
+                    case "mtproto/dh_gen_ok":
                         LOG(`[${this.connection.dcId}] dh_gen_ok`);
 
                         const new_nonce_hash1 = SHA1(concat(new_nonce, new Uint8Array([1]), this.authKeyAux)).slice(-16);
@@ -259,7 +259,7 @@ class Authorization {
 
                         return this.authKey;
 
-                    case "dh_gen_retry":
+                    case "mtproto/dh_gen_retry":
                         LOG(`[${this.connection.dcId}] dh_gen_retry`);
 
                         const new_nonce_hash2 = SHA1(concat(new_nonce, new Uint8Array([2]), this.authKeyAux)).slice(-16);
@@ -272,7 +272,7 @@ class Authorization {
 
                         break;
 
-                    case "dh_gen_fail":
+                    case "mtproto/dh_gen_fail":
                         const new_nonce_hash3 = SHA1(concat(new_nonce, new Uint8Array([3]), this.authKeyAux)).slice(-16);
 
                         isAuthorized = false;

@@ -117,7 +117,7 @@ class Connection {
     }
 
     sendMessage(message_id: string, message_data: Uint8Array, contentRelated: boolean = true) {
-        const message = TL.packer(this.application.config.schema)
+        const message = TL.packer(this.application.schema)
             .write(this.authorization.serverSalt)
             .write(this.sessionId)
             .long(message_id)
@@ -128,7 +128,7 @@ class Connection {
 
         const encrypted = encrypt_message(concat(message, padding16(message.length)), this.authorization.authKey);
 
-        const encrypted_data = TL.packer(this.application.config.schema)
+        const encrypted_data = TL.packer(this.application.schema)
             .write(this.authorization.authKeyId)
             .write(encrypted.msg_key)
             .write(encrypted.encrypted_data)
@@ -138,7 +138,7 @@ class Connection {
     }
 
     sendUnencryptedMessage(message_data: Uint8Array) {
-        const message = TL.packer(this.application.config.schema)
+        const message = TL.packer(this.application.schema)
             .long("0") // auth_key_id
             .long(this.state.nextMessageId()) // message_id
             .int(message_data.length) // message_data_length
@@ -152,7 +152,7 @@ class Connection {
         return new Promise((resolve, reject) => {
             this.unencryptedProcessor = {resolve, reject};
 
-            this.sendUnencryptedMessage(TL.packMethod(this.application.config.schema, name, params));
+            this.sendUnencryptedMessage(TL.packMethod(this.application.schema, name, params));
         });
     }
 
@@ -163,7 +163,7 @@ class Connection {
             });
         }
 
-        const packer = TL.packer(this.application.config.schema);
+        const packer = TL.packer(this.application.schema);
 
         if (!this.withUpdates) {
             packer.id(0xbf9459b7); // invokeWithoutUpdates
@@ -211,8 +211,8 @@ class Connection {
     ackMessages(msg_ids: string[]) {
         this.sendMessage(
             this.state.nextMessageId(),
-            TL.pack(this.application.config.schema, {
-                _: "msgs_ack",
+            TL.pack(this.application.schema, {
+                _: "mtproto/msgs_ack",
                 msg_ids: msg_ids
             }),
             false
@@ -220,7 +220,7 @@ class Connection {
     }
 
     receiveMessage(buffer: ArrayBuffer) {
-        let unpacker = TL.unpacker(this.application.config.schema, buffer);
+        let unpacker = TL.unpacker(this.application.schema, buffer);
 
         const auth_key_id = unpacker.read(8);
 
@@ -258,7 +258,7 @@ class Connection {
             // encrypted_data
             // salt:int64    session_id:int64    message_id:int64    seq_no:int32    message_data_length:int32    message_data:bytes    padding:bytes
 
-            unpacker = TL.unpacker(this.application.config.schema, decrypted_message.decrypted_data);
+            unpacker = TL.unpacker(this.application.schema, decrypted_message.decrypted_data);
 
             const salt = unpacker.read(8); // todo: check salt
             const session_id = unpacker.read(8);

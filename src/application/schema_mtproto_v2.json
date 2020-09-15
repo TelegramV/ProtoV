@@ -1,0 +1,706 @@
+{
+  "constructors": [
+    {
+      "id": 85337187,
+      "predicate": "mtproto/resPQ",
+      "params": [
+        {
+          "name": "nonce",
+          "type": "int128"
+        },
+        {
+          "name": "server_nonce",
+          "type": "int128"
+        },
+        {
+          "name": "pq",
+          "type": "bytes"
+        },
+        {
+          "name": "server_public_key_fingerprints",
+          "type": "Vector<long>"
+        }
+      ],
+      "type": "MTProto/ResPQ"
+    },
+    {
+      "id": -2083955988,
+      "predicate": "mtproto/p_q_inner_data",
+      "params": [
+        {
+          "name": "pq",
+          "type": "bytes"
+        },
+        {
+          "name": "p",
+          "type": "bytes"
+        },
+        {
+          "name": "q",
+          "type": "bytes"
+        },
+        {
+          "name": "nonce",
+          "type": "int128"
+        },
+        {
+          "name": "server_nonce",
+          "type": "int128"
+        },
+        {
+          "name": "new_nonce",
+          "type": "int256"
+        }
+      ],
+      "type": "MTProto/P_Q_inner_data"
+    },
+    {
+      "id": 2043348061,
+      "predicate": "mtproto/server_DH_params_fail",
+      "params": [
+        {
+          "name": "nonce",
+          "type": "int128"
+        },
+        {
+          "name": "server_nonce",
+          "type": "int128"
+        },
+        {
+          "name": "new_nonce_hash",
+          "type": "int128"
+        }
+      ],
+      "type": "MTProto/Server_DH_Params"
+    },
+    {
+      "id": -790100132,
+      "predicate": "mtproto/server_DH_params_ok",
+      "params": [
+        {
+          "name": "nonce",
+          "type": "int128"
+        },
+        {
+          "name": "server_nonce",
+          "type": "int128"
+        },
+        {
+          "name": "encrypted_answer",
+          "type": "bytes"
+        }
+      ],
+      "type": "MTProto/Server_DH_Params"
+    },
+    {
+      "id": -1249309254,
+      "predicate": "mtproto/server_DH_inner_data",
+      "params": [
+        {
+          "name": "nonce",
+          "type": "int128"
+        },
+        {
+          "name": "server_nonce",
+          "type": "int128"
+        },
+        {
+          "name": "g",
+          "type": "int"
+        },
+        {
+          "name": "dh_prime",
+          "type": "bytes"
+        },
+        {
+          "name": "g_a",
+          "type": "bytes"
+        },
+        {
+          "name": "server_time",
+          "type": "int"
+        }
+      ],
+      "type": "MTProto/Server_DH_inner_data"
+    },
+    {
+      "id": 1715713620,
+      "predicate": "mtproto/client_DH_inner_data",
+      "params": [
+        {
+          "name": "nonce",
+          "type": "int128"
+        },
+        {
+          "name": "server_nonce",
+          "type": "int128"
+        },
+        {
+          "name": "retry_id",
+          "type": "long"
+        },
+        {
+          "name": "g_b",
+          "type": "bytes"
+        }
+      ],
+      "type": "MTProto/Client_DH_Inner_Data"
+    },
+    {
+      "id": 1003222836,
+      "predicate": "mtproto/dh_gen_ok",
+      "params": [
+        {
+          "name": "nonce",
+          "type": "int128"
+        },
+        {
+          "name": "server_nonce",
+          "type": "int128"
+        },
+        {
+          "name": "new_nonce_hash1",
+          "type": "int128"
+        }
+      ],
+      "type": "MTProto/Set_client_DH_params_answer"
+    },
+    {
+      "id": 1188831161,
+      "predicate": "mtproto/dh_gen_retry",
+      "params": [
+        {
+          "name": "nonce",
+          "type": "int128"
+        },
+        {
+          "name": "server_nonce",
+          "type": "int128"
+        },
+        {
+          "name": "new_nonce_hash2",
+          "type": "int128"
+        }
+      ],
+      "type": "MTProto/Set_client_DH_params_answer"
+    },
+    {
+      "id": -1499615742,
+      "predicate": "mtproto/dh_gen_fail",
+      "params": [
+        {
+          "name": "nonce",
+          "type": "int128"
+        },
+        {
+          "name": "server_nonce",
+          "type": "int128"
+        },
+        {
+          "name": "new_nonce_hash3",
+          "type": "int128"
+        }
+      ],
+      "type": "MTProto/Set_client_DH_params_answer"
+    },
+    {
+      "id": -212046591,
+      "predicate": "mtproto/rpc_result",
+      "params": [
+        {
+          "name": "req_msg_id",
+          "type": "long"
+        },
+        {
+          "name": "result",
+          "type": "Object"
+        }
+      ],
+      "type": "MTProto/RpcResult"
+    },
+    {
+      "id": 558156313,
+      "predicate": "mtproto/rpc_error",
+      "params": [
+        {
+          "name": "error_code",
+          "type": "int"
+        },
+        {
+          "name": "error_message",
+          "type": "string"
+        }
+      ],
+      "type": "MTProto/RpcError"
+    },
+    {
+      "id": 1579864942,
+      "predicate": "mtproto/rpc_answer_unknown",
+      "params": [],
+      "type": "MTProto/RpcDropAnswer"
+    },
+    {
+      "id": -847714938,
+      "predicate": "mtproto/rpc_answer_dropped_running",
+      "params": [],
+      "type": "MTProto/RpcDropAnswer"
+    },
+    {
+      "id": -1539647305,
+      "predicate": "mtproto/rpc_answer_dropped",
+      "params": [
+        {
+          "name": "msg_id",
+          "type": "long"
+        },
+        {
+          "name": "seq_no",
+          "type": "int"
+        },
+        {
+          "name": "bytes",
+          "type": "int"
+        }
+      ],
+      "type": "MTProto/RpcDropAnswer"
+    },
+    {
+      "id": 155834844,
+      "predicate": "mtproto/future_salt",
+      "params": [
+        {
+          "name": "valid_since",
+          "type": "int"
+        },
+        {
+          "name": "valid_until",
+          "type": "int"
+        },
+        {
+          "name": "salt",
+          "type": "long"
+        }
+      ],
+      "type": "MTProto/FutureSalt"
+    },
+    {
+      "id": -1370486635,
+      "predicate": "mtproto/future_salts",
+      "params": [
+        {
+          "name": "req_msg_id",
+          "type": "long"
+        },
+        {
+          "name": "now",
+          "type": "int"
+        },
+        {
+          "name": "salts",
+          "type": "vector<mtproto/future_salt>"
+        }
+      ],
+      "type": "MTProto/FutureSalts"
+    },
+    {
+      "id": 880243653,
+      "predicate": "mtproto/pong",
+      "params": [
+        {
+          "name": "msg_id",
+          "type": "long"
+        },
+        {
+          "name": "ping_id",
+          "type": "long"
+        }
+      ],
+      "type": "MTProto/Pong"
+    },
+    {
+      "id": -501201412,
+      "predicate": "mtproto/destroy_session_ok",
+      "params": [
+        {
+          "name": "session_id",
+          "type": "long"
+        }
+      ],
+      "type": "MTProto/DestroySessionRes"
+    },
+    {
+      "id": 1658015945,
+      "predicate": "mtproto/destroy_session_none",
+      "params": [
+        {
+          "name": "session_id",
+          "type": "long"
+        }
+      ],
+      "type": "MTProto/DestroySessionRes"
+    },
+    {
+      "id": -1631450872,
+      "predicate": "mtproto/new_session_created",
+      "params": [
+        {
+          "name": "first_msg_id",
+          "type": "long"
+        },
+        {
+          "name": "unique_id",
+          "type": "long"
+        },
+        {
+          "name": "server_salt",
+          "type": "long"
+        }
+      ],
+      "type": "MTProto/NewSession"
+    },
+    {
+      "id": 1945237724,
+      "predicate": "mtproto/msg_container",
+      "params": [
+        {
+          "name": "messages",
+          "type": "vector<%MTProto/Message>"
+        }
+      ],
+      "type": "MTProto/MessageContainer"
+    },
+    {
+      "id": 1538843921,
+      "predicate": "mtproto/message",
+      "params": [
+        {
+          "name": "msg_id",
+          "type": "long"
+        },
+        {
+          "name": "seqno",
+          "type": "int"
+        },
+        {
+          "name": "bytes",
+          "type": "int"
+        },
+        {
+          "name": "body",
+          "type": "Object"
+        }
+      ],
+      "type": "MTProto/Message"
+    },
+    {
+      "id": -530561358,
+      "predicate": "mtproto/msg_copy",
+      "params": [
+        {
+          "name": "orig_message",
+          "type": "MTProto/Message"
+        }
+      ],
+      "type": "MTProto/MessageCopy"
+    },
+    {
+      "id": 812830625,
+      "predicate": "mtproto/gzip_packed",
+      "params": [
+        {
+          "name": "packed_data",
+          "type": "bytes"
+        }
+      ],
+      "type": "Object"
+    },
+    {
+      "id": 1658238041,
+      "predicate": "mtproto/msgs_ack",
+      "params": [
+        {
+          "name": "msg_ids",
+          "type": "Vector<long>"
+        }
+      ],
+      "type": "MTProto/MsgsAck"
+    },
+    {
+      "id": -1477445615,
+      "predicate": "mtproto/bad_msg_notification",
+      "params": [
+        {
+          "name": "bad_msg_id",
+          "type": "long"
+        },
+        {
+          "name": "bad_msg_seqno",
+          "type": "int"
+        },
+        {
+          "name": "error_code",
+          "type": "int"
+        }
+      ],
+      "type": "MTProto/BadMsgNotification"
+    },
+    {
+      "id": -307542917,
+      "predicate": "mtproto/bad_server_salt",
+      "params": [
+        {
+          "name": "bad_msg_id",
+          "type": "long"
+        },
+        {
+          "name": "bad_msg_seqno",
+          "type": "int"
+        },
+        {
+          "name": "error_code",
+          "type": "int"
+        },
+        {
+          "name": "new_server_salt",
+          "type": "long"
+        }
+      ],
+      "type": "MTProto/BadMsgNotification"
+    },
+    {
+      "id": 2105940488,
+      "predicate": "mtproto/msg_resend_req",
+      "params": [
+        {
+          "name": "msg_ids",
+          "type": "Vector<long>"
+        }
+      ],
+      "type": "MTProto/MsgResendReq"
+    },
+    {
+      "id": -630588590,
+      "predicate": "mtproto/msgs_state_req",
+      "params": [
+        {
+          "name": "msg_ids",
+          "type": "Vector<long>"
+        }
+      ],
+      "type": "MTProto/MsgsStateReq"
+    },
+    {
+      "id": 81704317,
+      "predicate": "mtproto/msgs_state_info",
+      "params": [
+        {
+          "name": "req_msg_id",
+          "type": "long"
+        },
+        {
+          "name": "info",
+          "type": "bytes"
+        }
+      ],
+      "type": "MTProto/MsgsStateInfo"
+    },
+    {
+      "id": -1933520591,
+      "predicate": "mtproto/msgs_all_info",
+      "params": [
+        {
+          "name": "msg_ids",
+          "type": "Vector<long>"
+        },
+        {
+          "name": "info",
+          "type": "bytes"
+        }
+      ],
+      "type": "MTProto/MsgsAllInfo"
+    },
+    {
+      "id": 661470918,
+      "predicate": "mtproto/msg_detailed_info",
+      "params": [
+        {
+          "name": "msg_id",
+          "type": "long"
+        },
+        {
+          "name": "answer_msg_id",
+          "type": "long"
+        },
+        {
+          "name": "bytes",
+          "type": "int"
+        },
+        {
+          "name": "status",
+          "type": "int"
+        }
+      ],
+      "type": "MTProto/MsgDetailedInfo"
+    },
+    {
+      "id": -2137147681,
+      "predicate": "mtproto/msg_new_detailed_info",
+      "params": [
+        {
+          "name": "answer_msg_id",
+          "type": "long"
+        },
+        {
+          "name": "bytes",
+          "type": "int"
+        },
+        {
+          "name": "status",
+          "type": "int"
+        }
+      ],
+      "type": "MTProto/MsgDetailedInfo"
+    }
+  ],
+  "methods": [
+    {
+      "id": 1615239032,
+      "method": "mtproto/req_pq",
+      "params": [
+        {
+          "name": "nonce",
+          "type": "int128"
+        }
+      ],
+      "type": "MTProto/ResPQ"
+    },
+    {
+      "id": -686627650,
+      "method": "mtproto/req_DH_params",
+      "params": [
+        {
+          "name": "nonce",
+          "type": "int128"
+        },
+        {
+          "name": "server_nonce",
+          "type": "int128"
+        },
+        {
+          "name": "p",
+          "type": "bytes"
+        },
+        {
+          "name": "q",
+          "type": "bytes"
+        },
+        {
+          "name": "public_key_fingerprint",
+          "type": "long"
+        },
+        {
+          "name": "encrypted_data",
+          "type": "bytes"
+        }
+      ],
+      "type": "MTProto/Server_DH_Params"
+    },
+    {
+      "id": -184262881,
+      "method": "mtproto/set_client_DH_params",
+      "params": [
+        {
+          "name": "nonce",
+          "type": "int128"
+        },
+        {
+          "name": "server_nonce",
+          "type": "int128"
+        },
+        {
+          "name": "encrypted_data",
+          "type": "bytes"
+        }
+      ],
+      "type": "MTProto/Set_client_DH_params_answer"
+    },
+    {
+      "id": 1491380032,
+      "method": "mtproto/rpc_drop_answer",
+      "params": [
+        {
+          "name": "req_msg_id",
+          "type": "long"
+        }
+      ],
+      "type": "MTProto/RpcDropAnswer"
+    },
+    {
+      "id": -1188971260,
+      "method": "mtproto/get_future_salts",
+      "params": [
+        {
+          "name": "num",
+          "type": "int"
+        }
+      ],
+      "type": "MTProto/FutureSalts"
+    },
+    {
+      "id": 2059302892,
+      "method": "mtproto/ping",
+      "params": [
+        {
+          "name": "ping_id",
+          "type": "long"
+        }
+      ],
+      "type": "MTProto/Pong"
+    },
+    {
+      "id": -213746804,
+      "method": "mtproto/ping_delay_disconnect",
+      "params": [
+        {
+          "name": "ping_id",
+          "type": "long"
+        },
+        {
+          "name": "disconnect_delay",
+          "type": "int"
+        }
+      ],
+      "type": "MTProto/Pong"
+    },
+    {
+      "id": -414113498,
+      "method": "mtproto/destroy_session",
+      "params": [
+        {
+          "name": "session_id",
+          "type": "long"
+        }
+      ],
+      "type": "MTProto/DestroySessionRes"
+    },
+    {
+      "id": -1835453025,
+      "method": "mtproto/http_wait",
+      "params": [
+        {
+          "name": "max_delay",
+          "type": "int"
+        },
+        {
+          "name": "wait_after",
+          "type": "int"
+        },
+        {
+          "name": "max_wait",
+          "type": "int"
+        }
+      ],
+      "type": "MTProto/HttpWait"
+    }
+  ]
+}
